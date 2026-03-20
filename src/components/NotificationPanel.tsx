@@ -179,6 +179,7 @@ function NotificationItem({
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onClick={() => onMarkRead(item.id)}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -187,6 +188,7 @@ function NotificationItem({
         background: hovered ? bgHover : bgDefault,
         borderTop: '1px solid ' + color['border-primary'],
         transition: 'background 0.12s',
+        cursor: 'pointer',
       }}
     >
       {/* Top row: dot + tag + timestamp */}
