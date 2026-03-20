@@ -25,23 +25,24 @@ export function ActivityCard({
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      gap: 0,
+      height: 196,
       background: color['bg-primary'],
       border: `1px solid ${color['border-primary']}`,
-      borderRadius: radius['card-large'],
+      borderRadius: radius['cards'],
       boxShadow: shadow['card'],
-      overflow: 'hidden',
+      paddingLeft: 12,
+      paddingTop: 16,
+      paddingBottom: 16,
+      boxSizing: 'border-box',
     }}>
       {/* Illustration panel */}
       <div style={{
-        width: 160,
-        minHeight: 140,
+        width: 180,
+        height: 180,
         flexShrink: 0,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: color['bg-secondary'],
-        padding: 16,
       }}>
         {illustration}
       </div>
@@ -49,7 +50,7 @@ export function ActivityCard({
       {/* Content */}
       <div style={{
         flex: 1,
-        padding: 16,
+        paddingLeft: 16,
         display: 'flex',
         flexDirection: 'column',
         gap: 8,

@@ -1,6 +1,5 @@
 import React from 'react';
 import { color, shadow } from '../design-system/tokens';
-import { Avatar } from '../design-system/Avatar';
 import { Icon } from '../design-system/Icon';
 import { NotificationPanel } from './NotificationPanel';
 
@@ -52,11 +51,12 @@ export function Navbar({
       style={{
         display: 'flex',
         alignItems: 'center',
-        height: 52,
-        paddingLeft: 24,
-        paddingRight: 24,
+        height: 60,
+        paddingLeft: 64,
+        paddingRight: 64,
         background: color['bg-primary'],
         boxShadow: shadow['page-header'],
+        borderBottom: `2px solid ${color['border-primary']}`,
         position: 'sticky',
         top: 0,
         zIndex: 100,
@@ -77,82 +77,118 @@ export function Navbar({
       </a>
 
       {/* Nav links */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: 4, flex: 1 }}>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: 4, flex: 1, marginLeft: 0 }}>
         {(['Study', 'Connect', 'Review'] as const).map(label => (
           <NavLink key={label} label={label} />
         ))}
       </nav>
 
       {/* Right side actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        {/* Language selector */}
-        <button style={ghostButtonStyle}>
-          <span style={{ fontSize: 13, fontFamily: "'Fira Sans', sans-serif", color: color['text-primary'] }}>
-            English
-          </span>
-          <CaretDownIcon size={11} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        {/* Language selector — input-style */}
+        <button style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: 240,
+          height: 40,
+          padding: '0 12px',
+          background: color['bg-primary'],
+          border: `1px solid ${color['border-primary']}`,
+          borderRadius: 8,
+          cursor: 'pointer',
+          fontFamily: "'Fira Sans', sans-serif",
+          fontSize: 16,
+          fontWeight: 400,
+          color: color['text-primary'],
+        }}>
+          <span>English</span>
+          <CaretDownIcon size={12} />
         </button>
 
-        {/* AI / translate icon */}
-        <IconButton aria-label="Translate">
-          <Icon name="translator" size={18} color={color['text-secondary']} />
-        </IconButton>
+        {/* Icon buttons group */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {/* AI / translate icon */}
+          <IconButton aria-label="Translate">
+            <Icon name="translator" size={24} color={color['text-secondary']} />
+          </IconButton>
 
-        {/* Settings */}
-        <IconButton aria-label="Settings">
-          <SettingsIcon size={18} />
-        </IconButton>
+          {/* Settings */}
+          <IconButton aria-label="Settings">
+            <SettingsIcon size={24} />
+          </IconButton>
 
-        {/* Notification bell */}
-        <div style={{ position: 'relative' }}>
-          <button
-            onClick={onNotificationClick}
-            aria-label={`Notifications${notificationCount > 0 ? `, ${notificationCount} unread` : ''}`}
-            style={{
-              ...ghostButtonStyle,
-              position: 'relative',
-              padding: 8,
-            }}
-          >
-            <BellIcon size={18} />
-            {notificationCount > 0 && (
-              <span style={{
-                position: 'absolute',
-                top: 4,
-                right: 4,
-                minWidth: 16,
-                height: 16,
-                borderRadius: 999,
-                background: '#ca2b34',
-                color: '#fff',
-                fontSize: 10,
-                fontWeight: 700,
-                fontFamily: "'Fira Sans', sans-serif",
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                lineHeight: 1,
-                padding: '0 3px',
-                boxSizing: 'border-box',
-                border: `2px solid ${color['bg-primary']}`,
-              }}>
-                {notificationCount}
-              </span>
+          {/* Notification bell */}
+          <div style={{ position: 'relative' }}>
+            <IconButton
+              onClick={onNotificationClick}
+              aria-label={`Notifications${notificationCount > 0 ? `, ${notificationCount} unread` : ''}`}
+              style={{ position: 'relative' }}
+            >
+              <BellIcon size={24} />
+              {notificationCount > 0 && (
+                <span style={{
+                  position: 'absolute',
+                  top: 4,
+                  right: 4,
+                  minWidth: 16,
+                  height: 16,
+                  borderRadius: 999,
+                  background: '#ca2b34',
+                  color: '#fff',
+                  fontSize: 10,
+                  fontWeight: 700,
+                  fontFamily: "'Fira Sans', sans-serif",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  lineHeight: 1,
+                  padding: '0 3px',
+                  boxSizing: 'border-box',
+                  border: `2px solid ${color['bg-primary']}`,
+                }}>
+                  {notificationCount}
+                </span>
+              )}
+            </IconButton>
+            {notificationPanelOpen && onNotificationClose && (
+              <NotificationPanel
+                onClose={onNotificationClose}
+                onUnreadCountChange={onUnreadCountChange}
+              />
             )}
-          </button>
-          {notificationPanelOpen && onNotificationClose && (
-            <NotificationPanel
-              onClose={onNotificationClose}
-              onUnreadCountChange={onUnreadCountChange}
-            />
-          )}
-        </div>
+          </div>
 
-        {/* User avatar */}
-        <button style={{ ...ghostButtonStyle, gap: 6 }}>
-          <Avatar initials="AL" size="s" />
-          <CaretDownIcon size={11} />
-        </button>
+          {/* User avatar — inline initials + caret */}
+          <button style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: 0,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+          }}>
+            <div style={{
+              width: 32,
+              height: 32,
+              borderRadius: 999,
+              background: color['bg-blue-light'],
+              border: `1px solid ${color['border-primary']}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: "'Fira Sans', sans-serif",
+              fontSize: 16,
+              fontWeight: 600,
+              color: color['text-primary'],
+              flexShrink: 0,
+            }}>
+              AL
+            </div>
+            <CaretDownIcon size={12} />
+          </button>
+        </div>
       </div>
     </header>
   );
@@ -171,7 +207,7 @@ function NavLink({ label }: { label: string }) {
       borderRadius: 6,
       cursor: 'pointer',
       fontFamily: "'Fira Sans', sans-serif",
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: 400,
       color: color['text-primary'],
     }}>
@@ -181,21 +217,24 @@ function NavLink({ label }: { label: string }) {
   );
 }
 
-function IconButton({ children, ...rest }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+function IconButton({ children, style, ...rest }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: 36,
-        height: 36,
+        width: 40,
+        minWidth: 40,
+        height: 40,
         padding: 0,
         background: 'none',
         border: 'none',
         borderRadius: 6,
         cursor: 'pointer',
         color: color['text-secondary'],
+        position: 'relative',
+        ...style,
       }}
       {...rest}
     >
@@ -203,16 +242,3 @@ function IconButton({ children, ...rest }: React.ButtonHTMLAttributes<HTMLButton
     </button>
   );
 }
-
-const ghostButtonStyle: React.CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: 4,
-  padding: '0 8px',
-  height: 36,
-  background: 'none',
-  border: 'none',
-  borderRadius: 6,
-  cursor: 'pointer',
-  color: color['text-secondary'],
-};

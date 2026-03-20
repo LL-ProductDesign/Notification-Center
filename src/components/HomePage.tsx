@@ -26,37 +26,44 @@ export function HomePage() {
         onUnreadCountChange={setNotifCount}
       />
 
-      <main style={{ flex: 1, padding: '24px 24px 40px' }}>
-        {/* Welcome header */}
-        <div style={{ marginBottom: 20 }}>
-          <h1 style={{
-            fontFamily: "'Fira Sans', sans-serif",
-            fontSize: 26,
-            fontWeight: 600,
-            color: color['text-primary'],
-            margin: 0,
-            lineHeight: '40px',
-          }}>
-            Welcome, Alex!
-          </h1>
-          <p style={{
-            fontFamily: "'Fira Sans', sans-serif",
-            fontSize: 16,
-            fontWeight: 400,
-            color: color['text-primary'],
-            margin: 0,
-            lineHeight: '22px',
-          }}>
-            You have new items to complete today, selected specifically for you
-          </p>
+      <main style={{ flex: 1, padding: '0 64px 16px' }}>
+        {/* Welcome header row — title+subtitle on left, stats bar on right */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '24px 0',
+        }}>
+          <div>
+            <h1 style={{
+              fontFamily: "'Fira Sans', sans-serif",
+              fontSize: 26,
+              fontWeight: 600,
+              color: color['text-primary'],
+              margin: 0,
+              lineHeight: '40px',
+            }}>
+              Welcome, Alex!
+            </h1>
+            <p style={{
+              fontFamily: "'Fira Sans', sans-serif",
+              fontSize: 18,
+              fontWeight: 400,
+              color: color['text-primary'],
+              margin: 0,
+              lineHeight: '24px',
+            }}>
+              You have new items to complete today, selected specifically for you
+            </p>
+          </div>
+
+          <StatsBar />
         </div>
 
-        {/* Two-column layout */}
-        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-          {/* Left column — stats + activity cards */}
+        {/* Activity cards + right widgets area */}
+        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', padding: '0 0 16px' }}>
+          {/* Left column — activity cards */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
-            <StatsBar />
-
             <ActivityCard
               illustration={<PrepareClassIllustration />}
               title="Prepare an upcoming class"
