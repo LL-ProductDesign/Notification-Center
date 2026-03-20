@@ -6,7 +6,7 @@ import { LearnlightButton } from '../design-system/LearnlightButton';
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type TagVariant = 'error' | 'warning' | 'info';
-type TabId = 'all' | 'unread' | 'today';
+type TabId = 'all' | 'unread';
 
 interface Notification {
   id: string;
@@ -103,16 +103,6 @@ function CloseIcon({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
       <path d="M12 4L4 12M4 4l8 8" stroke={color['text-secondary']} strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function DotsMenuIcon({ size = 12 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 12 12" fill={color['text-secondary']} aria-hidden>
-      <circle cx="6" cy="2" r="1.2" />
-      <circle cx="6" cy="6" r="1.2" />
-      <circle cx="6" cy="10" r="1.2" />
     </svg>
   );
 }
@@ -225,42 +215,26 @@ function NotificationItem({
         {item.body}
       </p>
 
-      {/* Bottom: action + dots */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <button
-          onClick={() => onMarkRead(item.id)}
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            height: 24,
-            fontFamily: "'Fira Sans', sans-serif",
-            fontSize: 14,
-            fontWeight: 600,
-            color: color['text-brand'],
-            cursor: 'pointer',
-            textTransform: 'capitalize',
-            lineHeight: '18px',
-          }}
-        >
-          {item.actionLabel}
-        </button>
-        <button style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: 24,
-          height: 24,
+      {/* Bottom: action */}
+      <button
+        onClick={(e) => e.stopPropagation()}
+        style={{
           background: 'none',
           border: 'none',
-          borderRadius: radius['interactive'],
-          cursor: 'pointer',
           padding: 0,
-          flexShrink: 0,
-        }}>
-          <DotsMenuIcon size={12} />
-        </button>
-      </div>
+          height: 24,
+          fontFamily: "'Fira Sans', sans-serif",
+          fontSize: 14,
+          fontWeight: 600,
+          color: color['text-brand'],
+          cursor: 'pointer',
+          textTransform: 'capitalize',
+          lineHeight: '18px',
+          alignSelf: 'flex-start',
+        }}
+      >
+        {item.actionLabel}
+      </button>
     </div>
   );
 }
@@ -304,7 +278,6 @@ export function NotificationPanel({ onClose, onUnreadCountChange }: Notification
 
   const filtered = notifications.filter(n => {
     if (activeTab === 'unread') return n.unread;
-    if (activeTab === 'today') return ['13:51', '2h ago'].includes(n.timestamp);
     return true;
   });
 
@@ -366,7 +339,6 @@ export function NotificationPanel({ onClose, onUnreadCountChange }: Notification
           tabs={[
             { id: 'all',    label: 'All' },
             { id: 'unread', label: 'Unread' },
-            { id: 'today',  label: 'Today' },
           ]}
           activeId={activeTab}
           onChange={(id) => setActiveTab(id as TabId)}
