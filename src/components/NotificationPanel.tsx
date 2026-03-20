@@ -342,24 +342,14 @@ export function NotificationPanel({ onClose, onUnreadCountChange }: Notification
         }}>
           Notifications
         </span>
-        <button
+        <LearnlightButton
+          variant="txt_grey"
+          size="m"
+          content="icon_only"
+          selectIconLeft={<CloseIcon size={16} />}
           onClick={onClose}
           aria-label="Close notifications"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 32,
-            height: 32,
-            background: 'none',
-            border: 'none',
-            borderRadius: radius['interactive'],
-            cursor: 'pointer',
-            flexShrink: 0,
-          }}
-        >
-          <CloseIcon size={16} />
-        </button>
+        />
       </div>
 
       {/* Tabs + Mark all read */}
