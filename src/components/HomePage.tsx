@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { color } from '../design-system/tokens';
 import { Navbar } from './Navbar';
 import { StatsBar } from './StatsBar';

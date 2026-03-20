@@ -118,15 +118,9 @@ export function LearnlightButton({
   const palette = COLORS[variant];
   const dim = SIZES[size];
 
-  const bg = isDisabled
-    ? 'bgDisabled' in palette ? palette.bgDisabled : palette.bg
-    : hovered
-      ? palette.bgHover
-      : palette.bg;
-
-  const color = isDisabled
-    ? 'textDisabled' in palette ? palette.textDisabled : palette.text
-    : palette.text;
+  const p = palette as Record<string, string>;
+  const bg = isDisabled ? (p.bgDisabled ?? p.bg) : hovered ? p.bgHover : p.bg;
+  const color = isDisabled ? (p.textDisabled ?? p.text) : p.text;
 
   const border =
     variant === 'secondary'

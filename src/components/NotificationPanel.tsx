@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { color, shadow, radius } from '../design-system/tokens';
 import { UnderlineTabs } from '../design-system/UnderlineTabs';
 import { LearnlightButton } from '../design-system/LearnlightButton';
@@ -117,24 +117,6 @@ function DotsMenuIcon({ size = 12 }: { size?: number }) {
   );
 }
 
-function ErrorTagIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
-      <circle cx="8" cy="8" r="6.5" stroke={color['text-error']} strokeWidth="1.2" />
-      <path d="M8 5v3.5M8 10.5v.5" stroke={color['text-error']} strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function InfoTagIcon({ size = 16, variant }: { size?: number; variant: TagVariant }) {
-  const c = variant === 'error' ? color['text-error'] : variant === 'warning' ? color['text-warning'] : color['text-brand'];
-  return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
-      <circle cx="8" cy="8" r="6.5" stroke={c} strokeWidth="1.2" />
-      <path d="M8 7v4M8 5.5v.5" stroke={c} strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 

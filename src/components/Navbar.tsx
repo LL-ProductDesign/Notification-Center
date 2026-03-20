@@ -22,14 +22,6 @@ function CaretDownIcon({ size = 12 }: { size?: number }) {
   );
 }
 
-function GlobeIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-      <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.2" fill="none" />
-      <path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5M8 1.5C8 1.5 10.5 4 10.5 8S8 14.5 8 14.5M1.5 8h13M2 5h12M2 11h12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" fill="none" />
-    </svg>
-  );
-}
 
 function SettingsIcon({ size = 16 }: { size?: number }) {
   return (
