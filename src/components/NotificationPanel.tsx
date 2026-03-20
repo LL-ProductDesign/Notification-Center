@@ -215,7 +215,7 @@ function NotificationItem({
       <p style={{
         fontFamily: "'Fira Sans', sans-serif",
         fontSize: 14,
-        fontWeight: 400,
+        fontWeight: item.unread ? 600 : 400,
         color: color['text-primary'],
         lineHeight: '18px',
         margin: 0,
