@@ -26,7 +26,7 @@ export function HomePage() {
         onUnreadCountChange={setNotifCount}
       />
 
-      <main style={{ flex: 1, padding: '0 64px 16px' }}>
+      <main style={{ flex: 1, padding: '0 64px 16px', maxWidth: 1312, width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
         {/* Welcome header row — title+subtitle on left, stats bar on right */}
         <div style={{
           display: 'flex',
