@@ -99,13 +99,6 @@ const TAG_STYLES: Record<TagVariant, { bg: string; border: string; textColor: st
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
 
-function CloseIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path d="M12 4L4 12M4 4l8 8" stroke={color['text-secondary']} strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -304,8 +297,7 @@ export function NotificationPanel({ onClose, onUnreadCountChange }: Notification
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '8px 8px 8px 16px',
+        padding: '12px 16px',
         flexShrink: 0,
       }}>
         <span style={{
@@ -317,14 +309,6 @@ export function NotificationPanel({ onClose, onUnreadCountChange }: Notification
         }}>
           Notifications
         </span>
-        <LearnlightButton
-          variant="txt_grey"
-          size="m"
-          content="icon_only"
-          selectIconLeft={<CloseIcon size={16} />}
-          onClick={onClose}
-          aria-label="Close notifications"
-        />
       </div>
 
       {/* Tabs + Mark all read */}
