@@ -104,7 +104,7 @@ export function Navbar({
       }}>
         AL
       </div>
-      {!isMobile && <Icon name="caret-down" size={12} color={color['text-secondary']} />}
+      {!isMobile && <Icon name="caret-down" size={12} color={color['text-primary']} />}
     </button>
   );
 
@@ -148,7 +148,7 @@ export function Navbar({
           <>
             <div style={{ flex: 1 }}>
               <IconButton aria-label="Menu">
-                <Icon name="menu-hamburger" size={24} color={color['text-secondary']} />
+                <Icon name="menu-hamburger" size={24} color={color['text-primary']} />
               </IconButton>
             </div>
             {logo}
@@ -190,10 +190,10 @@ export function Navbar({
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <IconButton aria-label="Translate">
-                  <Icon name="translator" size={24} color={color['text-secondary']} />
+                  <Icon name="translator" size={24} color={color['text-primary']} />
                 </IconButton>
                 <IconButton aria-label="Settings">
-                  <Icon name="settings" size={24} color={color['text-secondary']} />
+                  <Icon name="settings" size={24} color={color['text-primary']} />
                 </IconButton>
                 {bellButton}
                 {avatar}
@@ -244,7 +244,7 @@ function IconButton({ children, style, ...rest }: React.ButtonHTMLAttributes<HTM
         border: 'none',
         borderRadius: 6,
         cursor: 'pointer',
-        color: color['text-secondary'],
+        color: color['text-primary'],
         position: 'relative',
         ...style,
       }}
