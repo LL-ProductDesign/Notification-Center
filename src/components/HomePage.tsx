@@ -123,7 +123,7 @@ export function HomePage() {
               🌐 EN ▾
             </span>
             <span style={{ fontFamily: "'Fira Sans', sans-serif", fontSize: 12, color: color['text-secondary'] }}>
-              Powered by: <strong style={{ color: color['text-brand'] }}>learnlight</strong>
+              Powered by: <strong style={{ color: color['text-brand'] }}>Learning</strong>
             </span>
           </div>
         </div>
