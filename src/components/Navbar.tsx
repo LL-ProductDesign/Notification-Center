@@ -49,33 +49,25 @@ export function Navbar({
   return (
     <header
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        height: 60,
-        paddingLeft: 64,
-        paddingRight: 64,
         background: color['bg-primary'],
         boxShadow: shadow['page-header'],
         borderBottom: `2px solid ${color['border-primary']}`,
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        gap: 24,
       }}
     >
-      {/* Logo */}
-      <a href="#" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-        <span style={{
-          fontFamily: "'Fira Sans', sans-serif",
-          fontWeight: 700,
-          fontSize: 20,
-          color: color['text-brand'],
-          letterSpacing: -0.5,
-        }}>
-          learnlight
-        </span>
-      </a>
-
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        height: 60,
+        maxWidth: 1312,
+        width: '100%',
+        margin: '0 auto',
+        padding: '0 64px',
+        boxSizing: 'border-box',
+        gap: 24,
+      }}>
       {/* Nav links */}
       <nav style={{ display: 'flex', alignItems: 'center', gap: 4, flex: 1, marginLeft: 0 }}>
         {(['Study', 'Connect', 'Review'] as const).map(label => (
@@ -189,6 +181,7 @@ export function Navbar({
             <CaretDownIcon size={12} />
           </button>
         </div>
+      </div>
       </div>
     </header>
   );
