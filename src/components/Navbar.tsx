@@ -2,8 +2,8 @@ import React from 'react';
 import { color, shadow } from '../design-system/tokens';
 import { Icon } from '../design-system/Icon';
 import { NotificationPanel } from './NotificationPanel';
+import { useBreakpoint } from '../design-system/useBreakpoint';
 
-// Bell SVG (not in icon set, defined inline)
 function BellIcon({ size = 18 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" fill="currentColor" aria-hidden>
@@ -21,6 +21,13 @@ function CaretDownIcon({ size = 12 }: { size?: number }) {
   );
 }
 
+function HamburgerIcon({ size = 24 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 function SettingsIcon({ size = 16 }: { size?: number }) {
   return (
@@ -46,17 +53,109 @@ export function Navbar({
   onNotificationClose,
   onUnreadCountChange,
 }: NavbarProps) {
+  const bp = useBreakpoint();
+  const isMobile = bp === 'mobile';
+  const padding = isMobile ? '0 16px' : bp === 'tablet' ? '0 16px' : '0';
+
+  const bellBadge = notificationCount > 0 && (
+    <span style={{
+      position: 'absolute',
+      top: 4,
+      right: 4,
+      minWidth: 16,
+      height: 16,
+      borderRadius: 999,
+      background: '#ca2b34',
+      color: '#fff',
+      fontSize: 10,
+      fontWeight: 700,
+      fontFamily: "'Fira Sans', sans-serif",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      lineHeight: 1,
+      padding: '0 3px',
+      boxSizing: 'border-box',
+      border: `2px solid ${color['bg-primary']}`,
+    }}>
+      {notificationCount}
+    </span>
+  );
+
+  const bellButton = (
+    <div style={{ position: 'relative' }}>
+      <IconButton
+        onClick={onNotificationClick}
+        aria-label={`Notifications${notificationCount > 0 ? `, ${notificationCount} unread` : ''}`}
+        style={{ position: 'relative' }}
+      >
+        <BellIcon size={24} />
+        {bellBadge}
+      </IconButton>
+      {notificationPanelOpen && onNotificationClose && (
+        <NotificationPanel
+          onClose={onNotificationClose}
+          onUnreadCountChange={onUnreadCountChange}
+          panelWidth={isMobile ? 'calc(100vw - 32px)' : 420}
+        />
+      )}
+    </div>
+  );
+
+  const avatar = (
+    <button style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 6,
+      padding: 0,
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+    }}>
+      <div style={{
+        width: 32,
+        height: 32,
+        borderRadius: 999,
+        background: color['bg-blue-light'],
+        border: `1px solid ${color['border-primary']}`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: "'Fira Sans', sans-serif",
+        fontSize: 16,
+        fontWeight: 600,
+        color: color['text-primary'],
+        flexShrink: 0,
+      }}>
+        AL
+      </div>
+      {!isMobile && <CaretDownIcon size={12} />}
+    </button>
+  );
+
+  const logo = (
+    <a href="#" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+      <span style={{
+        fontFamily: "'Fira Sans', sans-serif",
+        fontWeight: 700,
+        fontSize: 20,
+        color: color['text-brand'],
+        letterSpacing: -0.5,
+      }}>
+        Learning
+      </span>
+    </a>
+  );
+
   return (
-    <header
-      style={{
-        background: color['bg-primary'],
-        boxShadow: shadow['page-header'],
-        borderBottom: `2px solid ${color['border-primary']}`,
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-      }}
-    >
+    <header style={{
+      background: color['bg-primary'],
+      boxShadow: shadow['page-header'],
+      borderBottom: `2px solid ${color['border-primary']}`,
+      position: 'sticky',
+      top: 0,
+      zIndex: 100,
+    }}>
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -64,137 +163,69 @@ export function Navbar({
         maxWidth: 1312,
         width: '100%',
         margin: '0 auto',
-        padding: '0',
+        padding,
         boxSizing: 'border-box',
-        gap: 24,
+        gap: isMobile ? 0 : 24,
       }}>
-      {/* Logo */}
-      <a href="#" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-        <span style={{
-          fontFamily: "'Fira Sans', sans-serif",
-          fontWeight: 700,
-          fontSize: 20,
-          color: color['text-brand'],
-          letterSpacing: -0.5,
-        }}>
-          Learning
-        </span>
-      </a>
 
-      {/* Nav links */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: 4, flex: 1, marginLeft: 0 }}>
-        {(['Study', 'Connect', 'Review'] as const).map(label => (
-          <NavLink key={label} label={label} />
-        ))}
-      </nav>
-
-      {/* Right side actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        {/* Language selector — input-style */}
-        <button style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          width: 240,
-          height: 40,
-          padding: '0 12px',
-          background: color['bg-primary'],
-          border: `1px solid ${color['border-primary']}`,
-          borderRadius: 8,
-          cursor: 'pointer',
-          fontFamily: "'Fira Sans', sans-serif",
-          fontSize: 16,
-          fontWeight: 400,
-          color: color['text-primary'],
-        }}>
-          <span>English</span>
-          <CaretDownIcon size={12} />
-        </button>
-
-        {/* Icon buttons group */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {/* AI / translate icon */}
-          <IconButton aria-label="Translate">
-            <Icon name="translator" size={24} color={color['text-secondary']} />
-          </IconButton>
-
-          {/* Settings */}
-          <IconButton aria-label="Settings">
-            <SettingsIcon size={24} />
-          </IconButton>
-
-          {/* Notification bell */}
-          <div style={{ position: 'relative' }}>
-            <IconButton
-              onClick={onNotificationClick}
-              aria-label={`Notifications${notificationCount > 0 ? `, ${notificationCount} unread` : ''}`}
-              style={{ position: 'relative' }}
-            >
-              <BellIcon size={24} />
-              {notificationCount > 0 && (
-                <span style={{
-                  position: 'absolute',
-                  top: 4,
-                  right: 4,
-                  minWidth: 16,
-                  height: 16,
-                  borderRadius: 999,
-                  background: '#ca2b34',
-                  color: '#fff',
-                  fontSize: 10,
-                  fontWeight: 700,
-                  fontFamily: "'Fira Sans', sans-serif",
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  lineHeight: 1,
-                  padding: '0 3px',
-                  boxSizing: 'border-box',
-                  border: `2px solid ${color['bg-primary']}`,
-                }}>
-                  {notificationCount}
-                </span>
-              )}
-            </IconButton>
-            {notificationPanelOpen && onNotificationClose && (
-              <NotificationPanel
-                onClose={onNotificationClose}
-                onUnreadCountChange={onUnreadCountChange}
-              />
-            )}
-          </div>
-
-          {/* User avatar — inline initials + caret */}
-          <button style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            padding: 0,
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-          }}>
-            <div style={{
-              width: 32,
-              height: 32,
-              borderRadius: 999,
-              background: color['bg-blue-light'],
-              border: `1px solid ${color['border-primary']}`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontFamily: "'Fira Sans', sans-serif",
-              fontSize: 16,
-              fontWeight: 600,
-              color: color['text-primary'],
-              flexShrink: 0,
-            }}>
-              AL
+        {isMobile ? (
+          // Mobile layout: hamburger | logo (centered) | bell + avatar
+          <>
+            <div style={{ flex: 1 }}>
+              <IconButton aria-label="Menu">
+                <HamburgerIcon size={24} />
+              </IconButton>
             </div>
-            <CaretDownIcon size={12} />
-          </button>
-        </div>
-      </div>
+            {logo}
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4 }}>
+              {bellButton}
+              {avatar}
+            </div>
+          </>
+        ) : (
+          // Tablet + Desktop layout
+          <>
+            {logo}
+            <nav style={{ display: 'flex', alignItems: 'center', gap: 4, flex: 1 }}>
+              {(['Study', 'Connect', 'Review'] as const).map(label => (
+                <NavLink key={label} label={label} />
+              ))}
+            </nav>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <button style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: bp === 'tablet' ? 141 : 240,
+                height: 40,
+                padding: '0 12px',
+                background: color['bg-primary'],
+                border: `1px solid ${color['border-primary']}`,
+                borderRadius: 8,
+                cursor: 'pointer',
+                fontFamily: "'Fira Sans', sans-serif",
+                fontSize: 16,
+                fontWeight: 400,
+                color: color['text-primary'],
+              }}>
+                <span>English</span>
+                <CaretDownIcon size={12} />
+              </button>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <IconButton aria-label="Translate">
+                  <Icon name="translator" size={24} color={color['text-secondary']} />
+                </IconButton>
+                <IconButton aria-label="Settings">
+                  <SettingsIcon size={24} />
+                </IconButton>
+                {bellButton}
+                {avatar}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </header>
   );

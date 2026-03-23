@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { color } from '../design-system/tokens';
+import { useBreakpoint } from '../design-system/useBreakpoint';
 import { Navbar } from './Navbar';
 import { StatsBar } from './StatsBar';
 import { ActivityCard, PrepareClassIllustration, ReviewReportIllustration } from './ActivityCard';
@@ -9,6 +10,9 @@ import { ProgramDetailsWidget } from './ProgramDetailsWidget';
 export function HomePage() {
   const [notifCount, setNotifCount] = useState(2);
   const [panelOpen, setPanelOpen] = useState(false);
+  const bp = useBreakpoint();
+  const isMobile = bp === 'mobile';
+  const isDesktop = bp === 'desktop';
 
   return (
     <div style={{
@@ -26,13 +30,22 @@ export function HomePage() {
         onUnreadCountChange={setNotifCount}
       />
 
-      <main style={{ flex: 1, padding: '0 0 16px', maxWidth: 1312, width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
-        {/* Welcome header row — title+subtitle on left, stats bar on right */}
+      <main style={{
+        flex: 1,
+        maxWidth: 1312,
+        width: '100%',
+        margin: '0 auto',
+        boxSizing: 'border-box',
+        paddingBottom: 16,
+      }}>
+        {/* Welcome header row */}
         <div style={{
           display: 'flex',
-          alignItems: 'center',
+          alignItems: isMobile ? 'flex-start' : 'center',
           justifyContent: 'space-between',
-          padding: '24px 0',
+          padding: isMobile ? `16px 12px 8px` : bp === 'tablet' ? '24px 16px 16px' : '24px 0',
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: isMobile ? 0 : 16,
         }}>
           <div>
             <h1 style={{
@@ -57,13 +70,18 @@ export function HomePage() {
             </p>
           </div>
 
-          <StatsBar />
+          {!isMobile && <StatsBar />}
         </div>
 
         {/* Activity cards + right widgets area */}
-        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', padding: '0 0 16px' }}>
-          {/* Left column — activity cards */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
+        <div style={{
+          display: 'flex',
+          gap: 16,
+          alignItems: 'flex-start',
+          padding: isMobile ? '0 0 16px' : bp === 'tablet' ? '0 16px 16px' : '0 0 16px',
+        }}>
+          {/* Cards column */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: isMobile ? 8 : 16, minWidth: 0 }}>
             <ActivityCard
               illustration={<PrepareClassIllustration />}
               title="Prepare an upcoming class"
@@ -72,7 +90,6 @@ export function HomePage() {
               buttonLabel="Prepare Class"
               buttonVariant="primary"
             />
-
             <ActivityCard
               illustration={<ReviewReportIllustration />}
               title="Review your class report"
@@ -83,51 +100,59 @@ export function HomePage() {
             />
           </div>
 
-          {/* Right column — widgets */}
-          <div style={{
-            width: 312,
-            flexShrink: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 16,
-          }}>
-            <NextClassWidget />
-            <ProgramDetailsWidget />
-          </div>
+          {/* Right widgets — desktop only */}
+          {isDesktop && (
+            <div style={{
+              width: 312,
+              flexShrink: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16,
+            }}>
+              <NextClassWidget />
+              <ProgramDetailsWidget />
+            </div>
+          )}
         </div>
       </main>
 
-      {/* Footer */}
-      <footer style={{
-        borderTop: `1px solid ${color['border-primary']}`,
-        padding: '12px 24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        background: color['bg-primary'],
-      }}>
-        <span style={{
-          fontFamily: "'Fira Sans', sans-serif",
-          fontSize: 12,
-          color: color['text-secondary'],
+      {/* Footer — hidden on mobile */}
+      {!isMobile && (
+        <footer style={{
+          borderTop: `1px solid ${color['border-primary']}`,
+          padding: `12px ${bp === 'tablet' ? '16px' : '0'}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          background: color['bg-primary'],
+          maxWidth: bp === 'tablet' ? undefined : 1312,
+          width: '100%',
+          margin: bp === 'tablet' ? undefined : '0 auto',
+          boxSizing: 'border-box',
         }}>
-          ©2025 Learnlight. All Rights Reserved
-        </span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ display: 'flex', gap: 12 }}>
-            <a href="#" style={{ fontFamily: "'Fira Sans', sans-serif", fontSize: 12, color: color['text-brand'], textDecoration: 'none' }}>Privacy</a>
-            <a href="#" style={{ fontFamily: "'Fira Sans', sans-serif", fontSize: 12, color: color['text-brand'], textDecoration: 'none' }}>Cookies</a>
+          <span style={{
+            fontFamily: "'Fira Sans', sans-serif",
+            fontSize: 12,
+            color: color['text-secondary'],
+          }}>
+            ©2025 Learnlight. All Rights Reserved
+          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <a href="#" style={{ fontFamily: "'Fira Sans', sans-serif", fontSize: 12, color: color['text-brand'], textDecoration: 'none' }}>Privacy</a>
+              <a href="#" style={{ fontFamily: "'Fira Sans', sans-serif", fontSize: 12, color: color['text-brand'], textDecoration: 'none' }}>Cookies</a>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontFamily: "'Fira Sans', sans-serif", fontSize: 12, color: color['text-secondary'] }}>
+                🌐 EN ▾
+              </span>
+              <span style={{ fontFamily: "'Fira Sans', sans-serif", fontSize: 12, color: color['text-secondary'] }}>
+                Powered by: <strong style={{ color: color['text-brand'] }}>Learning</strong>
+              </span>
+            </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontFamily: "'Fira Sans', sans-serif", fontSize: 12, color: color['text-secondary'] }}>
-              🌐 EN ▾
-            </span>
-            <span style={{ fontFamily: "'Fira Sans', sans-serif", fontSize: 12, color: color['text-secondary'] }}>
-              Powered by: <strong style={{ color: color['text-brand'] }}>Learning</strong>
-            </span>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 }

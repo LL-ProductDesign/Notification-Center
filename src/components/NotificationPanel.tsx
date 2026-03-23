@@ -237,9 +237,10 @@ function NotificationItem({
 interface NotificationPanelProps {
   onClose: () => void;
   onUnreadCountChange?: (count: number) => void;
+  panelWidth?: number | string;
 }
 
-export function NotificationPanel({ onClose, onUnreadCountChange }: NotificationPanelProps) {
+export function NotificationPanel({ onClose, onUnreadCountChange, panelWidth = 420 }: NotificationPanelProps) {
   const [activeTab, setActiveTab] = useState<TabId>('all');
   const [notifications, setNotifications] = useState<Notification[]>(INITIAL_NOTIFICATIONS);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -281,7 +282,7 @@ export function NotificationPanel({ onClose, onUnreadCountChange }: Notification
         position: 'absolute',
         top: 'calc(100% + 8px)',
         right: 0,
-        width: 420,
+        width: panelWidth,
         maxHeight: 600,
         background: color['bg-primary'],
         border: `1px solid ${color['border-primary']}`,

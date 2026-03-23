@@ -1,9 +1,11 @@
 import React from 'react';
 import { color, shadow, radius } from '../design-system/tokens';
 import { LearnlightButton } from '../design-system/LearnlightButton';
+import { useBreakpoint } from '../design-system/useBreakpoint';
 
 interface ActivityCardProps {
   illustration: React.ReactNode;
+  illustrationMobile?: React.ReactNode;
   title: string;
   description: string;
   meta: string;
@@ -14,6 +16,7 @@ interface ActivityCardProps {
 
 export function ActivityCard({
   illustration,
+  illustrationMobile,
   title,
   description,
   meta,
@@ -21,6 +24,77 @@ export function ActivityCard({
   buttonVariant = 'primary',
   onAction,
 }: ActivityCardProps) {
+  const bp = useBreakpoint();
+  const isMobile = bp === 'mobile';
+
+  if (isMobile) {
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        background: color['bg-primary'],
+        border: `1px solid ${color['border-primary']}`,
+        borderRadius: radius['cards'],
+        boxShadow: shadow['card'],
+        paddingTop: 12,
+        paddingBottom: 12,
+        boxSizing: 'border-box',
+      }}>
+        {/* Illustration */}
+        <div style={{
+          width: 120,
+          height: 120,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+        }}>
+          {illustrationMobile ?? illustration}
+        </div>
+
+        {/* Content */}
+        <div style={{
+          width: '100%',
+          padding: '0 8px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 4,
+          boxSizing: 'border-box',
+        }}>
+          <p style={{
+            fontFamily: "'Fira Sans', sans-serif",
+            fontSize: 24,
+            fontWeight: 600,
+            color: color['text-primary'],
+            lineHeight: '32px',
+            margin: 0,
+          }}>
+            {title}
+          </p>
+          <p style={{
+            fontFamily: "'Fira Sans', sans-serif",
+            fontSize: 12,
+            fontWeight: 400,
+            color: color['text-secondary'],
+            lineHeight: '16px',
+            margin: 0,
+          }}>
+            {meta}
+          </p>
+          <div style={{ marginTop: 4, display: 'flex' }}>
+            <LearnlightButton
+              variant={buttonVariant}
+              size="s"
+              text={buttonLabel}
+              onClick={onAction}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{
       display: 'flex',
