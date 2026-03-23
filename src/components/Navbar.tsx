@@ -68,6 +68,19 @@ export function Navbar({
         boxSizing: 'border-box',
         gap: 24,
       }}>
+      {/* Logo */}
+      <a href="#" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+        <span style={{
+          fontFamily: "'Fira Sans', sans-serif",
+          fontWeight: 700,
+          fontSize: 20,
+          color: color['text-brand'],
+          letterSpacing: -0.5,
+        }}>
+          Learning
+        </span>
+      </a>
+
       {/* Nav links */}
       <nav style={{ display: 'flex', alignItems: 'center', gap: 4, flex: 1, marginLeft: 0 }}>
         {(['Study', 'Connect', 'Review'] as const).map(label => (
