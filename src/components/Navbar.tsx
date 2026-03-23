@@ -64,7 +64,7 @@ export function Navbar({
         maxWidth: 1312,
         width: '100%',
         margin: '0 auto',
-        padding: '0 64px',
+        padding: '0',
         boxSizing: 'border-box',
         gap: 24,
       }}>
