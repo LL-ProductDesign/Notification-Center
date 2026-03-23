@@ -13,30 +13,6 @@ function BellIcon({ size = 18 }: { size?: number }) {
   );
 }
 
-function CaretDownIcon({ size = 12 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 12 12" fill="currentColor" aria-hidden>
-      <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-    </svg>
-  );
-}
-
-function HamburgerIcon({ size = 24 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function SettingsIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-      <circle cx="8" cy="8" r="2" />
-      <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-    </svg>
-  );
-}
 
 interface NavbarProps {
   notificationCount?: number;
@@ -128,7 +104,7 @@ export function Navbar({
       }}>
         AL
       </div>
-      {!isMobile && <CaretDownIcon size={12} />}
+      {!isMobile && <Icon name="caret-down" size={12} color={color['text-secondary']} />}
     </button>
   );
 
@@ -172,7 +148,7 @@ export function Navbar({
           <>
             <div style={{ flex: 1 }}>
               <IconButton aria-label="Menu">
-                <HamburgerIcon size={24} />
+                <Icon name="menu-hamburger" size={24} color={color['text-secondary']} />
               </IconButton>
             </div>
             {logo}
@@ -209,7 +185,7 @@ export function Navbar({
                 color: color['text-primary'],
               }}>
                 <span>English</span>
-                <CaretDownIcon size={12} />
+                <Icon name="caret-down" size={12} color={color['text-primary']} />
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -217,7 +193,7 @@ export function Navbar({
                   <Icon name="translator" size={24} color={color['text-secondary']} />
                 </IconButton>
                 <IconButton aria-label="Settings">
-                  <SettingsIcon size={24} />
+                  <Icon name="settings" size={24} color={color['text-secondary']} />
                 </IconButton>
                 {bellButton}
                 {avatar}
@@ -248,7 +224,7 @@ function NavLink({ label }: { label: string }) {
       color: color['text-primary'],
     }}>
       {label}
-      <CaretDownIcon size={10} />
+      <Icon name="caret-down" size={10} color={color['text-primary']} />
     </button>
   );
 }
