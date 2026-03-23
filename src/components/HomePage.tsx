@@ -135,7 +135,7 @@ export function HomePage() {
             fontSize: 12,
             color: color['text-secondary'],
           }}>
-            ©2025 Learnlight. All Rights Reserved
+            ©2025 Learning. All Rights Reserved
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <div style={{ display: 'flex', gap: 12 }}>

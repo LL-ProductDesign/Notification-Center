@@ -156,7 +156,7 @@ function TabBase({ item, active, stretched, onClick }: TabBaseProps) {
 // ─── Public component ─────────────────────────────────────────────────────────
 
 /**
- * Learnlight Design System — Underline Tabs
+ * Learning Design System — Underline Tabs
  *
  * Tabs allow users to navigate between related views of content
  * while remaining in the context of the page.

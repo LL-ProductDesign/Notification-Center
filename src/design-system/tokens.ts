@@ -1,5 +1,5 @@
 /**
- * Learnlight Design System — Design Tokens
+ * Learning Design System — Design Tokens
  * Single source of truth shared by components and stories.
  * Values sourced from the Figma variable definitions.
  */

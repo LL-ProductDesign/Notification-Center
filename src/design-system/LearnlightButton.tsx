@@ -100,7 +100,7 @@ const DEFAULT_ICON = (size: number) => (
   </svg>
 );
 
-/** Learnlight Design System — Button */
+/** Learning Design System — Button */
 export function LearnlightButton({
   variant = 'primary',
   size = 'm',
