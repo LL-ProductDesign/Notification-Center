@@ -96,7 +96,6 @@ export function Navbar({
         <NotificationPanel
           onClose={onNotificationClose}
           onUnreadCountChange={onUnreadCountChange}
-          panelWidth={isMobile ? 'calc(100vw - 32px)' : 420}
         />
       )}
     </div>

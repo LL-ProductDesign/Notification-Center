@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { color, shadow, radius } from '../design-system/tokens';
 import { UnderlineTabs } from '../design-system/UnderlineTabs';
 import { LearnlightButton } from '../design-system/LearnlightButton';
+import { useBreakpoint } from '../design-system/useBreakpoint';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -96,10 +97,6 @@ const TAG_STYLES: Record<TagVariant, { bg: string; border: string; textColor: st
     textColor: color['text-brand'],
   },
 };
-
-// ─── Icons ────────────────────────────────────────────────────────────────────
-
-
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -208,7 +205,7 @@ function NotificationItem({
         {item.body}
       </p>
 
-      {/* Bottom: action */}
+      {/* Action */}
       <button
         onClick={(e) => e.stopPropagation()}
         style={{
@@ -232,68 +229,23 @@ function NotificationItem({
   );
 }
 
-// ─── Main panel ───────────────────────────────────────────────────────────────
+// ─── Shared panel content ─────────────────────────────────────────────────────
 
-interface NotificationPanelProps {
-  onClose: () => void;
-  onUnreadCountChange?: (count: number) => void;
-  panelWidth?: number | string;
-}
-
-export function NotificationPanel({ onClose, onUnreadCountChange, panelWidth = 420 }: NotificationPanelProps) {
-  const [activeTab, setActiveTab] = useState<TabId>('all');
-  const [notifications, setNotifications] = useState<Notification[]>(INITIAL_NOTIFICATIONS);
-  const panelRef = useRef<HTMLDivElement>(null);
-
-  // Click-outside to close
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
-        onClose();
-      }
-    }
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [onClose]);
-
-  // Notify parent of unread count changes
-  useEffect(() => {
-    const count = notifications.filter(n => n.unread).length;
-    onUnreadCountChange?.(count);
-  }, [notifications, onUnreadCountChange]);
-
-  function markAllRead() {
-    setNotifications(ns => ns.map(n => ({ ...n, unread: false })));
-  }
-
-  function markRead(id: string) {
-    setNotifications(ns => ns.map(n => n.id === id ? { ...n, unread: false } : n));
-  }
-
-  const filtered = notifications.filter(n => {
-    if (activeTab === 'unread') return n.unread;
-    return true;
-  });
-
+function PanelContent({
+  activeTab,
+  setActiveTab,
+  filtered,
+  markAllRead,
+  markRead,
+}: {
+  activeTab: TabId;
+  setActiveTab: (id: TabId) => void;
+  filtered: Notification[];
+  markAllRead: () => void;
+  markRead: (id: string) => void;
+}) {
   return (
-    <div
-      ref={panelRef}
-      style={{
-        position: 'absolute',
-        top: 'calc(100% + 8px)',
-        right: 0,
-        width: panelWidth,
-        maxHeight: 600,
-        background: color['bg-primary'],
-        border: `1px solid ${color['border-primary']}`,
-        borderRadius: radius['cards'],
-        boxShadow: shadow['modal'],
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        zIndex: 200,
-      }}
-    >
+    <>
       {/* Header */}
       <div style={{
         display: 'flex',
@@ -358,6 +310,162 @@ export function NotificationPanel({ onClose, onUnreadCountChange, panelWidth = 4
           ))
         )}
       </div>
+    </>
+  );
+}
+
+// ─── Main panel ───────────────────────────────────────────────────────────────
+
+interface NotificationPanelProps {
+  onClose: () => void;
+  onUnreadCountChange?: (count: number) => void;
+  panelWidth?: number | string;
+}
+
+export function NotificationPanel({ onClose, onUnreadCountChange }: NotificationPanelProps) {
+  const bp = useBreakpoint();
+  const isMobile = bp === 'mobile';
+
+  const [activeTab, setActiveTab] = useState<TabId>('all');
+  const [notifications, setNotifications] = useState<Notification[]>(INITIAL_NOTIFICATIONS);
+  const [visible, setVisible] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Slide-in animation on mount
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  // Click-outside to close (desktop/tablet only — mobile uses backdrop)
+  useEffect(() => {
+    if (isMobile) return;
+    function handleClick(e: MouseEvent) {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [onClose, isMobile]);
+
+  // Prevent body scroll when bottom sheet is open
+  useEffect(() => {
+    if (!isMobile) return;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, [isMobile]);
+
+  // Notify parent of unread count changes
+  useEffect(() => {
+    const count = notifications.filter(n => n.unread).length;
+    onUnreadCountChange?.(count);
+  }, [notifications, onUnreadCountChange]);
+
+  function markAllRead() {
+    setNotifications(ns => ns.map(n => ({ ...n, unread: false })));
+  }
+
+  function markRead(id: string) {
+    setNotifications(ns => ns.map(n => n.id === id ? { ...n, unread: false } : n));
+  }
+
+  const filtered = notifications.filter(n => {
+    if (activeTab === 'unread') return n.unread;
+    return true;
+  });
+
+  // ── Mobile: bottom sheet ──────────────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <>
+        {/* Backdrop */}
+        <div
+          onClick={onClose}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(9, 30, 66, 0.5)',
+            zIndex: 199,
+            opacity: visible ? 1 : 0,
+            transition: 'opacity 0.25s ease',
+          }}
+        />
+
+        {/* Sheet */}
+        <div
+          ref={panelRef}
+          style={{
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            maxHeight: '85vh',
+            background: color['bg-primary'],
+            borderRadius: '16px 16px 0 0',
+            boxShadow: shadow['modal'],
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            zIndex: 200,
+            transform: visible ? 'translateY(0)' : 'translateY(100%)',
+            transition: 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
+          }}
+        >
+          {/* Drag handle */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '12px 0 4px',
+            flexShrink: 0,
+          }}>
+            <div style={{
+              width: 40,
+              height: 4,
+              borderRadius: 2,
+              background: color['border-primary'],
+            }} />
+          </div>
+
+          <PanelContent
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            filtered={filtered}
+            markAllRead={markAllRead}
+            markRead={markRead}
+          />
+        </div>
+      </>
+    );
+  }
+
+  // ── Desktop / Tablet: dropdown ────────────────────────────────────────────
+  return (
+    <div
+      ref={panelRef}
+      style={{
+        position: 'absolute',
+        top: 'calc(100% + 8px)',
+        right: 0,
+        width: 420,
+        maxHeight: 600,
+        background: color['bg-primary'],
+        border: `1px solid ${color['border-primary']}`,
+        borderRadius: radius['cards'],
+        boxShadow: shadow['modal'],
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+        zIndex: 200,
+      }}
+    >
+      <PanelContent
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        filtered={filtered}
+        markAllRead={markAllRead}
+        markRead={markRead}
+      />
     </div>
   );
 }
